@@ -1,0 +1,17 @@
+{
+  "name": "chatbot-widget",
+  "version": "1.0.0",
+  "description": "A reusable chat widget for websites",
+  "main": "chatbox.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["chat", "widget", "bot"],
+  "author": "Khaulin",
+  "license": "MIT",
+  "dependencies": {},
+  "exports": {
+    ".": "./chatbox.js"
+  }
+}
