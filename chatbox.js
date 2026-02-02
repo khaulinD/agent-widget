@@ -7,7 +7,7 @@ const closeIconPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v176926
 const sendIconPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263646/send-alt-1-svgrepo-com_sjwqoj.svg";
 const logoPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263688/cross-svgrepo-com_lwjv9x.svg";
 const reload = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263556/reload-svgrepo-com_no8prp.svg";
-const baseURL = "https://03eaccd3a895.ngrok-free.app/api/v1"
+const baseURL = "https://6aff16c602aa.ngrok-free.app/api/v1"
 class Chatbox {
   constructor(options) {
     this.agentId = options.agentId;
@@ -142,15 +142,20 @@ class Chatbox {
       return;
     }
     const data = await response.json();
+    console.log(data, "data");
     if (!data) {
       console.error("No data received for chatbox config");
       return;
     }
+    console.log(data, "data");
     const {
       styles: { icon_bot = agentAvatarPath, icon_widget = logoPath, main_color },
       predefined_answers,
       welcome_messages,
     } = data;
+
+    
+    
     this.access = true; // Assume access is granted if response is OK (no 'access' field in new response)
     this.iconBot = icon_bot;
     this.iconWidget = icon_widget;
@@ -171,7 +176,7 @@ class Chatbox {
 
     // Get elements
     const chatboxHeader = this.chatboxElement.querySelector(".chatbox-header");
-    const agentAvatar = this.chatboxElement.querySelector(".agent-avatar");
+    // const agentAvatar = this.chatboxElement.querySelector(".agent-avatar");
     const chatButton = this.chatButton;
 
     // Check if elements exist before updating styles
@@ -181,11 +186,11 @@ class Chatbox {
       console.error(".chatbox-header not found");
     }
 
-    if (agentAvatar) {
-      agentAvatar.src = icon_bot;
-    } else {
-      console.error(".agent-avatar not found");
-    }
+    // if (agentAvatar) {
+    //   agentAvatar.src = icon_bot;
+    // } else {
+    //   console.error(".agent-avatar not found");
+    // }
 
     if (chatButton) {
       chatButton.style.backgroundImage = `url(${icon_widget})`;
@@ -805,12 +810,12 @@ styles.innerHTML = `
         height: 22px;
       }
     
-      .agent-avatar {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
+      // .agent-avatar {
+      //   width: 30px;
+      //   height: 30px;
+      //   margin-right: 10px;
+      //   border-radius: 50%;
+      // }
 
       #start-message-relative{
         position: relative;
