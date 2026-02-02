@@ -58,23 +58,22 @@ class Chatbox {
     return null;
   }
 
-  async getUserConversationHistory(secret_key, user_uuid) {
+  async getUserConversationHistory(user_uuid) {
     try {
-    //   const response = await fetch(
-    //     "https://apiv1.chatlix.eu/api/chat-bot/history-user-conversation/",
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({
-    //         secret_key: secret_key,
-    //         user_uuid: user_uuid,
-    //       }),
-    //     }
-    //   );
-    //   const data = await response.json();
-      this.userHistory = [];
+      const response = await fetch(
+        `${baseURL}/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_uuid: user_uuid
+          }),
+        }
+      );
+      const data = await response.json();
+      this.userHistory = data;
     } catch (error) {
       console.error("Error fetching user conversation history:", error);
       return [];
@@ -122,7 +121,7 @@ class Chatbox {
       this.setCookie("user_uuid_key", this.currentUUID, 1);
     }
     if (get_data) {
-      await this.getUserConversationHistory(this.secretChatId, user_uuid);
+      await this.getUserConversationHistory(user_uuid);
     }
 
     const response = await fetch(
@@ -143,12 +142,15 @@ class Chatbox {
       return;
     }
     const data = await response.json();
-    const item = data[0]; // Response is an array with one object
+    if (!data) {
+      console.error("No data received for chatbox config");
+      return;
+    }
     const {
       styles: { icon_bot = agentAvatarPath, icon_widget = logoPath, main_color },
       predefined_answers,
       welcome_messages,
-    } = item;
+    } = data;
     this.access = true; // Assume access is granted if response is OK (no 'access' field in new response)
     this.iconBot = icon_bot;
     this.iconWidget = icon_widget;
@@ -210,6 +212,9 @@ class Chatbox {
     }
   }
   formatText(message) {
+    if (!message){
+      return message
+    }
     const removeBrackets = message.replace(/\[[^\]]*\]/g, "");
 
     const cleanedText = removeBrackets.replace(/\(([^)]+)\)/g, "$1");
@@ -442,7 +447,7 @@ class Chatbox {
       for (let i = 0; i < this.userHistory.length; i++) {
         this.addMessage(
           "user",
-          this.userHistory[i]["messages"],
+          this.userHistory[i]["user_message"],
           undefined,
           false
         );
@@ -612,19 +617,19 @@ class Chatbox {
 
     const botResponse = await this.getBotResponse(
       this.secretChatId,
-      message,
-      this.domainHostName
+      message
     );
-
-    const formattedResponse = this.formatText(botResponse);
-
+    console.log(botResponse);
+    
+    const formattedResponse = this.formatText(botResponse.chat_answer);
+    console.log(formattedResponse);
     // Remove typing animation
     typingContainer.remove();
 
     this.addMessage("bot", formattedResponse, this.iconBot);
   }
 
-  async getBotResponse(secretKey, message, domain) {
+  async getBotResponse(secretKey, message) {
     try {
       let user_uuid;
       if (this.getCookie("user_uuid_key")) {
@@ -639,32 +644,31 @@ class Chatbox {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${secretKey}`,
           },
           body: JSON.stringify({
             user_uuid: user_uuid,
-            secret_key: secretKey,
-            message: message,
-            domain: domain,
+            query: message
           }),
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.statusText}`);
-      }
       const data = await response.json();
-
-      if (
+      if (!response.ok) {
+        if (
         data.detail &&
-        data.detail === "chat requests cannot be sent from this domain"
+        data.detail === "Access from this domain is not allowed for the chat bot."
       ) {
         return data.detail;
       }
+       throw error
+      }
+      
 
-      return data.response;
+      return data;
     } catch (error) {
       console.error("Failed to get bot response:", error);
-      return "Sorry, I couldn't process your request at the moment.";
+      return {"chat_answer": "Sorry, I couldn't process your request at the moment."};
     }
   }
 }
