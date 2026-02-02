@@ -7,7 +7,7 @@ const closeIconPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v176926
 const sendIconPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263646/send-alt-1-svgrepo-com_sjwqoj.svg";
 const logoPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263688/cross-svgrepo-com_lwjv9x.svg";
 const reload = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263556/reload-svgrepo-com_no8prp.svg";
-const baseURL = "http://127.0.0.1:8000/api/v1"
+const baseURL = "https://03eaccd3a895.ngrok-free.app/api/v1"
 class Chatbox {
   constructor(options) {
     this.agentId = options.agentId;
