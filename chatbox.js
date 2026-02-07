@@ -2,11 +2,11 @@ import { generateUUID } from "./uuid.js";
 
 const currentUUID = generateUUID();
 
-const agentAvatarPath ="./img/agent-awatar.svg";
-const closeIconPath = "./img/close.svg";
-const sendIconPath = "./img/send.svg";
-const logoPath = "./img/agent-awatar.svg";
-const reload = "./img/reload.svg";
+const agentAvatarPath ="https://khaulind.github.io/agent-widget/img/agent-awatar.svg";
+const closeIconPath = "https://khaulind.github.io/agent-widget/img/close.svg";
+const sendIconPath = "https://khaulind.github.io/agent-widget/img/send.svg";
+const logoPath = "https://khaulind.github.io/agent-widget/img/agent-awatar.svg";
+const reload = "https://khaulind.github.io/agent-widget/img/reload.svg";
 const baseURL = "https://8cbb-37-115-44-41.ngrok-free.app/api/v1"
 class Chatbox {
   constructor(options) {
