@@ -7,7 +7,7 @@ const closeIconPath = "./img/close.svg";
 const sendIconPath = "./img/send.svg";
 const logoPath = "./img/agent-awatar.svg";
 const reload = "./img/reload.svg";
-const baseURL = "http://127.0.0.1:8000/api/v1"
+const baseURL = "https://8cbb-37-115-44-41.ngrok-free.app/api/v1"
 class Chatbox {
   constructor(options) {
     this.agentId = options.agentId;
