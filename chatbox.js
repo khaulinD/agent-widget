@@ -2,12 +2,12 @@ import { generateUUID } from "./uuid.js";
 
 const currentUUID = generateUUID();
 
-const agentAvatarPath ="https://res.cloudinary.com/daitjz3vl/image/upload/v1769263688/cross-svgrepo-com_lwjv9x.svg";
-const closeIconPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263688/cross-svgrepo-com_lwjv9x.svg";
-const sendIconPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263646/send-alt-1-svgrepo-com_sjwqoj.svg";
-const logoPath = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263688/cross-svgrepo-com_lwjv9x.svg";
-const reload = "https://res.cloudinary.com/daitjz3vl/image/upload/v1769263556/reload-svgrepo-com_no8prp.svg";
-const baseURL = "https://6aff16c602aa.ngrok-free.app/api/v1"
+const agentAvatarPath ="./img/agent-awatar.svg";
+const closeIconPath = "./img/close.svg";
+const sendIconPath = "./img/send.svg";
+const logoPath = "./img/agent-awatar.svg";
+const reload = "./img/reload.svg";
+const baseURL = "http://127.0.0.1:8000/api/v1"
 class Chatbox {
   constructor(options) {
     this.agentId = options.agentId;
@@ -147,14 +147,16 @@ class Chatbox {
       console.error("No data received for chatbox config");
       return;
     }
-    console.log(data, "data");
     const {
-      styles: { icon_bot = agentAvatarPath, icon_widget = logoPath, main_color },
       predefined_answers,
       welcome_messages,
     } = data;
 
-    
+    const styles = data.styles || {};
+
+    const icon_bot = styles.icon_bot || agentAvatarPath;
+    const icon_widget = styles.icon_widget || logoPath;
+    const main_color = styles.main_color || "#3bb53d";
     
     this.access = true; // Assume access is granted if response is OK (no 'access' field in new response)
     this.iconBot = icon_bot;
@@ -162,6 +164,7 @@ class Chatbox {
     this.closeIconPath = closeIconPath;
     this.startMessages = welcome_messages ? [welcome_messages.message] : []; // Handle as single message object
     console.log(this.startMessages);
+    console.log(this.iconBot = icon_bot, this.iconWidget = icon_widget);
     
     this.createChatbox();
     this.initMessages();
@@ -187,6 +190,8 @@ class Chatbox {
     }
 
     // if (agentAvatar) {
+    //   console.log(icon_bot);
+      
     //   agentAvatar.src = icon_bot;
     // } else {
     //   console.error(".agent-avatar not found");
@@ -738,14 +743,46 @@ styles.innerHTML = `
         border-radius: 5px;
       }
       
-      #close-start-message {
-        background: none;
-        border: none;
-        cursor: pointer;
-        margin-left: 10px;
+   #close-start-message {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #fff;
+    cursor: pointer;
+
+    position: absolute;
+    top: -12px;
+    right: -12px;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+
+      #close-start-message img {
+        width: 14px;
+        height: 14px;
+        opacity: 0.7;
       }
-      
-  
+
+      #close-start-message:hover {
+        transform: scale(1.1);
+        background: var(--main-color);
+      }
+
+      #close-start-message:hover img {
+        filter: brightness(0) invert(1);
+        opacity: 1;
+      }
+        
       .chatbox-container {
         width: 390px;
         height: 70vh;
@@ -823,21 +860,11 @@ styles.innerHTML = `
       }
 
       #close-start-message{
-        width: 24px;
-        height: 24px;
         border: none;
         background: var(--main-color);
         color: white;
         cursor: pointer;
         border-radius: 50%;
-        position: absolute;
-        right: 0px;
-        top: -33px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999999999;
         padding: initial;
       }
 
